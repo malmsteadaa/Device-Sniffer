@@ -12,7 +12,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Sec2CourseProjectGroup3">
+        android:theme="@style/Theme.Sec2CourseProjectGroup3"
+        android:fullBackupContent="true">
         <uses-library
             android:name="com.google.android.wearable"
             android:required="true" />
@@ -26,8 +27,17 @@
             android:value="true" />
 
         <activity
-            android:name=".ManualSearch"
-            android:label="@string/title_activity_manual_search">
+            android:name=".WifiPage"
+            android:label="@string/title_activity_wifi_page">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".BluetoothPage"
+            android:label="@string/title_activity_bluetooth_page">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
