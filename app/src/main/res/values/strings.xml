@@ -13,5 +13,6 @@
     <string name="title_activity_bluetooth_page">BluetoothPage</string>
     <string name="title_activity_wifi_page">WifiPage</string>
     <string name="the_device_s_mac_address">The Device\'s Mac Address</string>
+    <string name="nearby_wifi">Nearby wifi</string>
 
 </resources>
