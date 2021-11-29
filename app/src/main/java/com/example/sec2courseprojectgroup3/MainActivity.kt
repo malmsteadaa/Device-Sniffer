@@ -6,20 +6,22 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-val bluetooth=BluetoothPage()
-val wifi=WifiPage()
+
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val bluetoothFragment = BluetoothFragment()
+        val wifiFragment = WifiFragment()
         findViewById<BottomNavigationView>(R.id.bottom_navigation).setOnItemSelectedListener { item ->
             when (item.itemId) {
             R.id.IBlueTouth->{
-            changeFragment(bluetooth)
+            changeFragment(bluetoothFragment)
                 true
             }
              R.id.IWifi->{
-                 changeFragment(wifi)
+                 changeFragment(wifiFragment)
                  true
              }
                 else -> false
