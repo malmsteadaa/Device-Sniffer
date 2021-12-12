@@ -5,10 +5,7 @@ import java.sql.DriverManager.println
 fun lookupVendor(mac: String) = URL("http://api.macvendors.com/$mac")
 
 
-class SearchMac {
-    fun SearchMac(args: String):String{
+     fun SearchMac(args: String):String{
         val macs = args
-        return lookupVendor(macs).toString()
+        return lookupVendor(macs).readText()
     }
-
-}

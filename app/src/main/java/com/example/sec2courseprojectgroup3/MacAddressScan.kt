@@ -2,7 +2,7 @@ package com.example.sec2courseprojectgroup3
 
 import android.content.Context
 import android.net.wifi.WifiManager
-import java.net.InetAddress;
+import java.net.InetAddress
 import android.util.Log
 import java.io.BufferedReader
 import java.io.FileReader
@@ -33,7 +33,7 @@ class MacAddressScan {
                         "Host: $host and Mac : $strMacAddress replied to ping"
                     )
                     //TODO: use API with the given mac address and add it to currentDeviceInfo
-                    val deviceVendor = "PLACE HOLDER"
+                    val deviceVendor = SearchMac(strMacAddress)
                     val currentDeviceInfo = DeviceInfo(host, strMacAddress, deviceVendor)
                     deviceInfoList.add(currentDeviceInfo)
                 } else {
@@ -66,7 +66,7 @@ class MacAddressScan {
 
     private fun getMacAddressFromIP(ipAddress: String): String {
         // buffered reader to open the file at /proc/net/arp
-        var bufferedReader: BufferedReader? = null
+        var bufferedReader: BufferedReader?
 
         try {
 
@@ -82,7 +82,7 @@ class MacAddressScan {
                 val splitted = line.split(" +".toRegex()).toTypedArray() // and converting to a typed array
 
                 // if the given array is not empty and contains >= 4 items then the split was sucessful
-                if (splitted != null && splitted.size >= 4) {
+                if (splitted.isNotEmpty() && splitted.size >= 4) {
 
                     // the ip address should be in the first position
                     val ip = splitted[0]
