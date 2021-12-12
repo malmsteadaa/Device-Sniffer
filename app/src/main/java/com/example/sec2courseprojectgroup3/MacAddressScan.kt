@@ -2,16 +2,17 @@ package com.example.sec2courseprojectgroup3
 
 import android.content.Context
 import android.net.wifi.WifiManager
-import java.net.InetAddress
+import java.net.InetAddress;
 import android.util.Log
+import kotlinx.coroutines.delay
 import java.io.BufferedReader
 import java.io.FileReader
 
-
+//
 
 class MacAddressScan {
     // NOTE: needs to be called through a coroutine
-    fun startPing(context:Context) : List<DeviceInfo>{
+    suspend fun startPing(context:Context) : List<DeviceInfo>{
 
         // the list that will contain all the deviceInfo objects
         val deviceInfoList = mutableListOf<DeviceInfo>()
@@ -32,8 +33,15 @@ class MacAddressScan {
                         "Scan",
                         "Host: $host and Mac : $strMacAddress replied to ping"
                     )
-                    //TODO: use API with the given mac address and add it to currentDeviceInfo
-                    val deviceVendor = SearchMac(strMacAddress)
+
+                    var deviceVendor : String
+                    try {
+                        delay(1200)
+                        deviceVendor = SearchMac(strMacAddress)
+
+                    } catch (e: Throwable) {
+                        deviceVendor = "NONE"
+                    }
                     val currentDeviceInfo = DeviceInfo(host, strMacAddress, deviceVendor)
                     deviceInfoList.add(currentDeviceInfo)
                 } else {
@@ -66,7 +74,7 @@ class MacAddressScan {
 
     private fun getMacAddressFromIP(ipAddress: String): String {
         // buffered reader to open the file at /proc/net/arp
-        var bufferedReader: BufferedReader?
+        var bufferedReader: BufferedReader? = null
 
         try {
 
@@ -82,7 +90,7 @@ class MacAddressScan {
                 val splitted = line.split(" +".toRegex()).toTypedArray() // and converting to a typed array
 
                 // if the given array is not empty and contains >= 4 items then the split was sucessful
-                if (splitted.isNotEmpty() && splitted.size >= 4) {
+                if (splitted != null && splitted.size >= 4) {
 
                     // the ip address should be in the first position
                     val ip = splitted[0]
