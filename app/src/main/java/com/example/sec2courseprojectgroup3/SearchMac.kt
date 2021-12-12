@@ -6,9 +6,9 @@ fun lookupVendor(mac: String) = URL("http://api.macvendors.com/$mac")
 
 
 class SearchMac {
-    fun SearchMac(args: Array<String>){
+    fun SearchMac(args: String):String{
         val macs = args
-        for (mac in macs) println(lookupVendor(mac).toString())
+        return lookupVendor(macs).toString()
     }
 
 }
