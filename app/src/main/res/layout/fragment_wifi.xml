@@ -4,28 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WifiFragment">
+    tools:context=".MainActivity">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+    <Button
+        android:id="@+id/bDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="112dp"
+        android:text="Display"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bScan"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:autofillHints="The devices Mac Address"
-            android:inputType="text"
-            android:hint="@string/the_device_s_mac_address"/>
+    <Button
+        android:id="@+id/bScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scan"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/bDisplay" />
 
-        <TextView
-            android:layout_gravity="center_horizontal|top"
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="WifiFragment" />
-
-    </FrameLayout>
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lvDisplay"
+        android:layout_width="344dp"
+        android:layout_height="529dp"
+        app:layout_constraintBottom_toTopOf="@+id/bDisplay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +27,8 @@ class WifiFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var deviceInfoAdapter: DeviceInfoAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -33,8 +41,34 @@ class WifiFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view = inflater.inflate(R.layout.fragment_wifi, container, false)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_wifi, container, false)
+
+
+        val test = MacAddressScan()
+        val context = this.requireContext()
+        var deviceList = listOf<DeviceInfo>()
+        val recyclerView = view.findViewById<RecyclerView>(R.id.lvDisplay)
+        deviceInfoAdapter = DeviceInfoAdapter(LayoutInflater.from(this.context))
+        recyclerView.adapter = deviceInfoAdapter
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
+
+        view.findViewById<Button>(R.id.bScan).setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                deviceList = test.startPingService(context)
+            }
+        }
+
+        view.findViewById<Button>(R.id.bDisplay).setOnClickListener {
+            //val  br: BufferedReader
+            deviceInfoAdapter.updateDeviceInfoList(deviceList)
+
+
+
+
+        }
+
+        return view
     }
 
     companion object {

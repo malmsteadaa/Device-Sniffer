@@ -4,5 +4,4 @@ class DeviceInfo (host: String, address: String, vendor: String) {
     val ipAddress = host
     val macAddress = address
     val deviceVendor = vendor
-
 }

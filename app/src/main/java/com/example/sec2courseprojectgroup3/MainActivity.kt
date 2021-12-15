@@ -1,11 +1,9 @@
 package com.example.sec2courseprojectgroup3
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,14 +14,14 @@ class MainActivity : AppCompatActivity() {
         val wifiFragment = WifiFragment()
         findViewById<BottomNavigationView>(R.id.bottom_navigation).setOnItemSelectedListener { item ->
             when (item.itemId) {
-            R.id.IBlueTouth->{
-            changeFragment(bluetoothFragment)
-                true
-            }
-             R.id.IWifi->{
-                 changeFragment(wifiFragment)
-                 true
-             }
+                R.id.IBlueTouth->{
+                    changeFragment(bluetoothFragment)
+                    true
+                }
+                R.id.IWifi->{
+                    changeFragment(wifiFragment)
+                    true
+                }
                 else -> false
             }
         }

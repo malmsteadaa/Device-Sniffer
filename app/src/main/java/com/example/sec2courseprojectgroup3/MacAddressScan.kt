@@ -1,18 +1,22 @@
 package com.example.sec2courseprojectgroup3
 
 import android.content.Context
+import android.net.wifi.WifiInfo
+
 import android.net.wifi.WifiManager
 import java.net.InetAddress;
 import android.util.Log
+import androidx.annotation.NonNull
 import kotlinx.coroutines.delay
 import java.io.BufferedReader
 import java.io.FileReader
+import kotlin.Exception
+import kotlin.concurrent.thread
+import kotlin.math.pow
 
-//
 
 class MacAddressScan {
-    // NOTE: needs to be called through a coroutine
-    suspend fun startPing(context:Context) : List<DeviceInfo>{
+    suspend fun startPingService(context:Context) : List<DeviceInfo>{
 
         // the list that will contain all the deviceInfo objects
         val deviceInfoList = mutableListOf<DeviceInfo>()
@@ -21,7 +25,7 @@ class MacAddressScan {
             // wifi manager
             val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
-            val subnet = getSubnetAddress(wifiManager.dhcpInfo.gateway)
+            val subnet = getSubnetAddress(wifiManager.dhcpInfo.gateway, wifiManager.dhcpInfo.netmask)
 
 
             // pinging every ip address in the network and checking if they reply timeout is set to 10 milliseconds
@@ -33,10 +37,10 @@ class MacAddressScan {
                         "Scan",
                         "Host: $host and Mac : $strMacAddress replied to ping"
                     )
-
+                    //TODO: use API with the given mac address and add it to currentDeviceInfo
                     var deviceVendor : String
                     try {
-                        delay(1200)
+                        delay(1100)
                         deviceVendor = SearchMac(strMacAddress)
 
                     } catch (e: Throwable) {
@@ -57,10 +61,10 @@ class MacAddressScan {
     }
 
     // getting the subnet address given an ip address
-    private fun getSubnetAddress(address: Int): String {
-        // NOTE: due to bugs in android, getting the netmask is not possible
-        // so i found a another method to get the subnetaddress
-        //v
+    private fun getSubnetAddress(address: Int, mask: Int): String {
+        // NOTE: due to bugs in andoird, getting the netmask is not possible
+        // so i found a nother method to get the subnetaddress
+        //val temp = address and mask
 
 
         return String.format(
@@ -71,7 +75,14 @@ class MacAddressScan {
         )
     }
 
+    private fun getSubNetMask(prefixLenght: Int) : Long {
+        val temp : Long = 4294967295
+        var prefix = 2
+        val mask =  prefix.toDouble().pow(prefixLenght) - 1
 
+        return (temp and  mask.toLong())
+
+    }
     private fun getMacAddressFromIP(ipAddress: String): String {
         // buffered reader to open the file at /proc/net/arp
         var bufferedReader: BufferedReader? = null
@@ -116,5 +127,8 @@ class MacAddressScan {
         // if the address could not be found the an empty mac address is returned
         return "00:00:00:00"
     }
+
+
+
 }
 
