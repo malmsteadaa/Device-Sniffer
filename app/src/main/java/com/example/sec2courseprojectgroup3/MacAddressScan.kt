@@ -16,7 +16,7 @@ import kotlin.math.pow
 
 
 class MacAddressScan {
-    suspend fun startPingService(context:Context) : List<DeviceInfo>{
+    suspend fun startPing(context:Context) : List<DeviceInfo>{
 
         // the list that will contain all the deviceInfo objects
         val deviceInfoList = mutableListOf<DeviceInfo>()
@@ -37,16 +37,18 @@ class MacAddressScan {
                         "Scan",
                         "Host: $host and Mac : $strMacAddress replied to ping"
                     )
-                    //TODO: use API with the given mac address and add it to currentDeviceInfo
+                    // Getting the vendor and waiting for api reply
                     var deviceVendor : String
                     try {
                         delay(1100)
                         deviceVendor = SearchMac(strMacAddress)
 
                     } catch (e: Throwable) {
-                        deviceVendor = "NONE"
+                        deviceVendor = "Unknown"
                     }
+                    // new device info
                     val currentDeviceInfo = DeviceInfo(host, strMacAddress, deviceVendor)
+                    // adding to list
                     deviceInfoList.add(currentDeviceInfo)
                 } else {
                     Log.e("Scan", "No Reply from: $host")
@@ -75,6 +77,7 @@ class MacAddressScan {
         )
     }
 
+    // TODO: IN PROGRESS
     private fun getSubNetMask(prefixLenght: Int) : Long {
         val temp : Long = 4294967295
         var prefix = 2
@@ -83,18 +86,20 @@ class MacAddressScan {
         return (temp and  mask.toLong())
 
     }
+
+    // reading from the apr file using regex to find the correct mac address using an ip as key
     private fun getMacAddressFromIP(ipAddress: String): String {
-        // buffered reader to open the file at /proc/net/arp
+
         var bufferedReader: BufferedReader? = null
 
         try {
 
-            // opening file
+
             bufferedReader = BufferedReader(FileReader("/proc/net/arp"))
 
             var line: String // current line
 
-            // reading a line on the file and comparing the ip address to the given ip address
+            // reading each line
             while (bufferedReader.readLine().also { line = it } != null) {
 
                 // splitting the line into different sections, the string is split by white spaces (1..*)

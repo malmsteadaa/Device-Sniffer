@@ -55,6 +55,7 @@ class BluetoothFragment : Fragment() {
 
     }
 
+    // handles the bluetooth devices discovered
     private val receiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
@@ -68,6 +69,7 @@ class BluetoothFragment : Fragment() {
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                     val deviceName = device?.name
                     val deviceHardwareAddress = device?.address // MAC address
+                    // coroutine to get info from api
                     CoroutineScope(IO).launch {
                         var vendorName : String
                         try {
@@ -77,6 +79,7 @@ class BluetoothFragment : Fragment() {
                             Log.e("BlueetoothScan", e.toString())
                         }
 
+                        // adding device to list and updating adapter
                         deviceList.add(DeviceInfo(deviceName, deviceHardwareAddress, vendorName))
                         requireActivity().runOnUiThread(Runnable {
                             deviceInfoAdapter.updateDeviceInfoList(deviceList)
@@ -105,20 +108,26 @@ class BluetoothFragment : Fragment() {
         recyclerView.adapter = deviceInfoAdapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
 
+        // bluetooth manager
         var bManager = this.requireContext().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = bManager.adapter
         view.findViewById<Button>(R.id.bBluetooth).setOnClickListener {
+            // checking for bluetooth adapter
             if (bluetoothAdapter == null) {
                 Toast.makeText(this.context, "Bluetooth is not available in this device", Toast.LENGTH_LONG).show()
             }
             else {
+                // checking for permissions
                 when (PermissionChecker.checkSelfPermission(this.requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
                     PackageManager.PERMISSION_GRANTED ->  {if ( !bluetoothAdapter.isEnabled) {
                         bluetoothAdapter.enable()
                     }
+                        // clearing list
                         deviceList.clear()
+                        // registering the receiver
                         requireActivity().registerReceiver(receiver, filter)
 
+                        // starting the discovery service
                         val status = bluetoothAdapter.startDiscovery()
 
                         Toast.makeText(this.context, "Discovery Started!", Toast.LENGTH_SHORT).show()
@@ -130,10 +139,12 @@ class BluetoothFragment : Fragment() {
         }
 
         view.findViewById<Button>(R.id.bStopDiscovery).setOnClickListener {
+            // checking for bluetooth adapter
             if (bluetoothAdapter == null) {
                 Toast.makeText(this.context, "Bluetooth is not available in this device", Toast.LENGTH_LONG).show()
             }
             else {
+                // stopping discovery to free resources
                 bluetoothAdapter.cancelDiscovery()
                 Toast.makeText(this.context, "Discovery Stopped", Toast.LENGTH_SHORT).show()
                 Log.d("BluetoothScan", "SIZE: " + deviceList.size)

@@ -54,17 +54,22 @@ class WifiFragment : Fragment() {
         var deviceList = listOf<DeviceInfo>()
         val recyclerView = view.findViewById<RecyclerView>(R.id.lvDisplay)
 
+        // spinner disabled
         spinner.visibility = View.GONE
+        // adapter
         deviceInfoAdapter = DeviceInfoAdapter(LayoutInflater.from(this.context))
         recyclerView.adapter = deviceInfoAdapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
 
         view.findViewById<Button>(R.id.bScan).setOnClickListener {
+            // coroutine to get the list of devices on network
             CoroutineScope(Dispatchers.IO).launch {
                 requireActivity().runOnUiThread(Runnable {
-                    spinner.visibility = View.VISIBLE
+                    spinner.visibility = View.VISIBLE // displaying visibility
                 })
-                deviceList = macScanner.startPingService(context)
+                // start ping
+                deviceList = macScanner.startPing(context)
+                // disabling spinner once process is done
                 requireActivity().runOnUiThread(Runnable {
                     deviceInfoAdapter.updateDeviceInfoList(deviceList)
                   spinner.visibility = View.GONE
