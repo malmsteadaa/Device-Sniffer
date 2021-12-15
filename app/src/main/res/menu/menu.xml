@@ -9,8 +9,5 @@
         android:id="@+id/IWifi"
         android:icon="@drawable/ic_baseline_wifi_24"
         android:title="@string/mbWifi"/>
-    <item
-        android:id="@+id/Open"
-        android:icon="@drawable/ic_baseline_leak_add_24"
-        android:title="@string/nearby_wifi"/>
+
 </menu>

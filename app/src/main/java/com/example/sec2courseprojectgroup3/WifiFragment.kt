@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.Spinner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +28,7 @@ class WifiFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private lateinit var spinner: ProgressBar
     private lateinit var deviceInfoAdapter: DeviceInfoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,35 +43,40 @@ class WifiFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         val view = inflater.inflate(R.layout.fragment_wifi, container, false)
         // Inflate the layout for this fragment
 
-
+        spinner = view.findViewById<ProgressBar>(R.id.progressBar1)
         val test = MacAddressScan()
         val context = this.requireContext()
         var deviceList = listOf<DeviceInfo>()
         val recyclerView = view.findViewById<RecyclerView>(R.id.lvDisplay)
+
+        spinner.visibility = View.GONE
         deviceInfoAdapter = DeviceInfoAdapter(LayoutInflater.from(this.context))
         recyclerView.adapter = deviceInfoAdapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
 
         view.findViewById<Button>(R.id.bScan).setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
+                requireActivity().runOnUiThread(Runnable {
+                    spinner.visibility = View.VISIBLE
+                })
                 deviceList = test.startPingService(context)
+                requireActivity().runOnUiThread(Runnable {
+                    deviceInfoAdapter.updateDeviceInfoList(deviceList)
+                  spinner.visibility = View.GONE
+                })
             }
         }
 
-        view.findViewById<Button>(R.id.bDisplay).setOnClickListener {
-            //val  br: BufferedReader
-            deviceInfoAdapter.updateDeviceInfoList(deviceList)
 
-
-
-
-        }
 
         return view
     }
+
 
     companion object {
         /**
