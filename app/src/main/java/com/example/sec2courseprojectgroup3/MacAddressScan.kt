@@ -25,7 +25,7 @@ class MacAddressScan {
             // wifi manager
             val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
-            val subnet = getSubnetAddress(wifiManager.dhcpInfo.gateway, wifiManager.dhcpInfo.netmask)
+            val subnet = getSubnetAddress(wifiManager.dhcpInfo.gateway)
 
 
             // pinging every ip address in the network and checking if they reply timeout is set to 10 milliseconds
@@ -61,7 +61,7 @@ class MacAddressScan {
     }
 
     // getting the subnet address given an ip address
-    private fun getSubnetAddress(address: Int, mask: Int): String {
+    private fun getSubnetAddress(address: Int): String {
         // NOTE: due to bugs in andoird, getting the netmask is not possible
         // so i found a nother method to get the subnetaddress
         //val temp = address and mask

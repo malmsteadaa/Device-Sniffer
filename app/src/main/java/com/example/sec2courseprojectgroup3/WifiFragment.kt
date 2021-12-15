@@ -49,7 +49,7 @@ class WifiFragment : Fragment() {
         // Inflate the layout for this fragment
 
         spinner = view.findViewById<ProgressBar>(R.id.progressBar1)
-        val test = MacAddressScan()
+        val macScanner = MacAddressScan()
         val context = this.requireContext()
         var deviceList = listOf<DeviceInfo>()
         val recyclerView = view.findViewById<RecyclerView>(R.id.lvDisplay)
@@ -64,7 +64,7 @@ class WifiFragment : Fragment() {
                 requireActivity().runOnUiThread(Runnable {
                     spinner.visibility = View.VISIBLE
                 })
-                deviceList = test.startPingService(context)
+                deviceList = macScanner.startPingService(context)
                 requireActivity().runOnUiThread(Runnable {
                     deviceInfoAdapter.updateDeviceInfoList(deviceList)
                   spinner.visibility = View.GONE

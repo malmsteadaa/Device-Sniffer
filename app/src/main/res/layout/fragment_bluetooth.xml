@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".BluetoothFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lvDisplayBlue"
+        android:layout_width="344dp"
+        android:layout_height="529dp"
+        app:layout_constraintBottom_toTopOf="@+id/bBluetooth"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/bBluetooth"
         android:layout_width="wrap_content"
